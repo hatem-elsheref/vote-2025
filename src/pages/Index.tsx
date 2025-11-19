@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Search, MapPin, Calendar, FileText, CheckCircle2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
+import bannerImage from "@/assets/candidate-banner.jpg";
 
 interface VotingData {
   electionLocation?: string;
@@ -60,19 +61,27 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Candidate Banner */}
-      <div className="bg-gradient-to-r from-primary to-primary/90 text-primary-foreground py-6 px-4 shadow-lg">
-        <div className="container max-w-4xl mx-auto">
+      <div 
+        className="relative bg-gradient-to-r from-primary to-primary/90 text-primary-foreground py-8 px-4 shadow-lg overflow-hidden"
+        style={{
+          backgroundImage: `url(${bannerImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute inset-0 bg-primary/40 backdrop-blur-[2px]"></div>
+        <div className="container max-w-4xl mx-auto relative z-10">
           <div className="flex items-center justify-center gap-6">
-            <div className="flex-shrink-0 w-20 h-20 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border-2 border-white/30">
-              <span className="text-4xl">✋</span>
+            <div className="flex-shrink-0 w-24 h-24 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border-4 border-white/50 shadow-2xl">
+              <span className="text-5xl">✋</span>
             </div>
             <div className="text-center flex-grow">
-              <h1 className="text-2xl md:text-3xl font-bold mb-1">باسم الديب</h1>
-              <div className="flex items-center justify-center gap-4 mt-2">
-                <span className="bg-secondary text-secondary-foreground px-4 py-1 rounded-full font-bold text-lg">
+              <h1 className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg">باسم الديب</h1>
+              <div className="flex items-center justify-center gap-4 mt-3">
+                <span className="bg-white text-primary px-5 py-2 rounded-full font-bold text-xl shadow-lg">
                   الرمز: ✋
                 </span>
-                <span className="bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full font-bold text-lg">
+                <span className="bg-white/90 text-primary px-5 py-2 rounded-full font-bold text-xl shadow-lg">
                   الرقم: 5
                 </span>
               </div>

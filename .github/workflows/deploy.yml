@@ -22,28 +22,64 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare files for deployment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build React app
+        run: npm run build:gh-pages
+        env:
+          VITE_BASE_PATH: /vote-2025/
+
+      - name: Create 404.html for SPA routing
         run: |
-          # Create deployment directory
-          mkdir -p _site
-          
-          # Copy index.html (already exists or use standalone)
-          if [ -f "index.html" ]; then
-            cp index.html _site/
-          elif [ -f "index-standalone.html" ]; then
-            cp index-standalone.html _site/index.html
-          fi
-          
-          # Copy banner image
-          if [ -f "bassem-eldeeb.jpg" ]; then
-            cp bassem-eldeeb.jpg _site/
-          elif [ -f "src/assets/bassem-eldeeb.jpg" ]; then
-            cp src/assets/bassem-eldeeb.jpg _site/bassem-eldeeb.jpg
-          fi
-          
-          # List files for debugging
-          echo "Files in _site:"
-          ls -la _site/
+          cat > dist/404.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="ar" dir="rtl">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>استعلام عن بيانات الانتخابات</title>
+            <script>
+              var pathSegmentsToKeep = 1;
+              var l = window.location;
+              var path = l.pathname;
+              
+              if (path.indexOf('/vote-2025') === 0) {
+                path = path.slice('/vote-2025'.length) || '/';
+              }
+              
+              var redirectUrl = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + 
+                '/vote-2025/index.html';
+              
+              if (path !== '/') {
+                redirectUrl += '?/' + path.replace(/^\//, '').replace(/&/g, '~and~');
+              }
+              
+              if (l.search) {
+                redirectUrl += (path === '/' ? '?' : '&') + l.search.slice(1).replace(/&/g, '~and~');
+              }
+              
+              if (l.hash) {
+                redirectUrl += l.hash;
+              }
+              
+              window.location.replace(redirectUrl);
+            </script>
+          </head>
+          <body>
+            <p>جاري التوجيه...</p>
+          </body>
+          </html>
+          EOF
+
+      - name: Create .nojekyll
+        run: touch dist/.nojekyll
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -51,7 +87,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './_site'
+          path: './dist'
 
   deploy:
     environment:

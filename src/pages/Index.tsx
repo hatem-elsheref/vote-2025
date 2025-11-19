@@ -69,9 +69,19 @@ const Index = () => {
     setApiResponse(null);
 
     try {
-      const response = await fetch(
-        `/api/election?nid=${nationalId}&location=1`
-      );
+      // Use Vite proxy in development, CORS proxy in production
+      let apiUrl: string;
+      if (import.meta.env.DEV) {
+        // Development: use Vite proxy
+        apiUrl = `/api/election?nid=${nationalId}&location=1`;
+      } else {
+        // Production: use CORS proxy to handle CORS issues
+        const targetUrl = `https://proxy.elections.eg/election?nid=${nationalId}&location=1`;
+        // Using allorigins.win as CORS proxy (alternative: corsproxy.io, api.allorigins.win)
+        apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+      }
+      
+      const response = await fetch(apiUrl);
       
       if (!response.ok) {
         throw new Error("فشل في جلب البيانات");

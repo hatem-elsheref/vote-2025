@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Search, MapPin, Calendar, FileText, CheckCircle2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
-import bannerImage from "@/assets/candidate-banner.jpg";
+import bannerImage from "@/assets/bassem-eldeeb.jpg";
 
 interface VotingData {
   electionLocation?: string;
@@ -62,29 +62,30 @@ const Index = () => {
     <div className="min-h-screen bg-background flex flex-col">
       {/* Candidate Banner */}
       <div 
-        className="relative bg-gradient-to-r from-primary to-primary/90 text-primary-foreground py-8 px-4 shadow-lg overflow-hidden"
+        className="relative overflow-hidden shadow-2xl"
         style={{
           backgroundImage: `url(${bannerImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
+          minHeight: '280px'
         }}
       >
-        <div className="absolute inset-0 bg-primary/40 backdrop-blur-[2px]"></div>
-        <div className="container max-w-4xl mx-auto relative z-10">
-          <div className="flex items-center justify-center gap-6">
-            <div className="flex-shrink-0 w-24 h-24 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border-4 border-white/50 shadow-2xl">
-              <span className="text-5xl">✋</span>
-            </div>
-            <div className="text-center flex-grow">
-              <h1 className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg">باسم الديب</h1>
-              <div className="flex items-center justify-center gap-4 mt-3">
-                <span className="bg-white text-primary px-5 py-2 rounded-full font-bold text-xl shadow-lg">
-                  الرمز: ✋
-                </span>
-                <span className="bg-white/90 text-primary px-5 py-2 rounded-full font-bold text-xl shadow-lg">
-                  الرقم: 5
-                </span>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+        <div className="container max-w-4xl mx-auto relative z-10 py-8 px-4">
+          <div className="flex flex-col items-center justify-center text-white">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl px-8 py-6 shadow-2xl border-4 border-secondary">
+              <h1 className="text-3xl md:text-4xl font-bold mb-3 text-primary text-center">
+                باسم صلاح الديب
+              </h1>
+              <div className="flex items-center justify-center gap-4">
+                <div className="flex items-center gap-2 bg-secondary text-secondary-foreground px-6 py-3 rounded-full font-bold text-xl shadow-lg">
+                  <span className="text-3xl">✋</span>
+                  <span>رقم 5</span>
+                </div>
               </div>
+              <p className="text-center text-muted-foreground font-semibold mt-3 text-sm">
+                دائرة مركز قطور - محافظة الغربية
+              </p>
             </div>
           </div>
         </div>

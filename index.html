@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>استعلام عن بيانات الانتخابات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --background: 210 40% 96%;
+      --foreground: 215 25% 20%;
+      --card: 0 0% 100%;
+      --primary: 35 65% 45%;
+      --primary-foreground: 0 0% 100%;
+      --secondary: 45 85% 55%;
+      --secondary-foreground: 35 25% 20%;
+      --muted: 35 20% 92%;
+      --muted-foreground: 35 10% 40%;
+      --accent: 45 90% 50%;
+      --border: 214 32% 91%;
+      --radius: 0.75rem;
+    }
+    
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: hsl(var(--background));
+      color: hsl(var(--foreground));
+      min-height: 100vh;
+      direction: rtl;
+    }
+    
+    .container {
+      max-width: 896px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    .card {
+      background: hsl(var(--card));
+      border-radius: var(--radius);
+      border: 1px solid hsl(var(--border));
+      box-shadow: 0 2px 8px hsla(215, 25%, 20%, 0.08);
+    }
+    
+    .card-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid hsl(var(--border));
+    }
+    
+    .card-content {
+      padding: 1.5rem;
+    }
+    
+    .btn {
+      background: hsl(var(--primary));
+      color: hsl(var(--primary-foreground));
+      padding: 0.75rem 1.5rem;
+      border-radius: calc(var(--radius) - 2px);
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn:hover {
+      opacity: 0.9;
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid hsl(var(--border));
+      border-radius: calc(var(--radius) - 2px);
+      font-size: 1rem;
+      background: hsl(var(--card));
+    }
+    
+    .input:focus {
+      outline: 2px solid hsl(var(--primary));
+      outline-offset: 2px;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .banner {
+      background-image: url('bassem-eldeeb.jpg');
+      background-size: cover;
+      background-position: center;
+      min-height: 200px;
+      position: relative;
+    }
+    
+    .banner-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.3), transparent);
+    }
+    
+    @media (min-width: 768px) {
+      .container {
+        padding: 0 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="min-h-screen flex flex-col">
+    <!-- Candidate Banner -->
+    <div class="banner relative overflow-hidden shadow-2xl">
+      <div class="banner-overlay"></div>
+      <div class="container mx-auto relative z-10 py-8 px-4">
+        <div class="flex flex-col items-center justify-center text-white">
+          <div class="bg-white/95 backdrop-blur-sm rounded-2xl px-8 py-6 shadow-2xl border-4" style="border-color: hsl(var(--secondary));">
+            <h1 class="text-3xl md:text-4xl font-bold mb-3 text-center" style="color: hsl(var(--primary));">
+              باسم صلاح الديب
+            </h1>
+            <div class="flex items-center justify-center gap-4">
+              <div class="flex items-center gap-2 px-6 py-3 rounded-full font-bold text-xl shadow-lg" style="background: hsl(var(--secondary)); color: hsl(var(--secondary-foreground));">
+                <span class="text-3xl">✋</span>
+                <span>رقم 5</span>
+              </div>
+            </div>
+            <p class="text-center font-semibold mt-3 text-sm" style="color: hsl(var(--muted-foreground));">
+              دائرة مركز قطور - محافظة الغربية
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-grow container mx-auto px-3 md:px-4 py-4 md:py-6">
+      <!-- Search Section -->
+      <div class="card mb-4 md:mb-6 shadow-md">
+        <div class="card-header">
+          <h2 class="text-center text-lg md:text-xl lg:text-2xl font-bold">استعلام عن بيانات الانتخاب</h2>
+        </div>
+        <div class="card-content">
+          <form id="searchForm" class="space-y-3 md:space-y-4">
+            <div class="flex flex-col gap-2 md:gap-3">
+              <label for="nationalId" class="text-base md:text-lg font-semibold">
+                الرقم القومي (14 رقم)
+              </label>
+              <div class="flex gap-2">
+                <input
+                  id="nationalId"
+                  type="text"
+                  placeholder="أدخل الرقم القومي"
+                  class="input text-base md:text-lg h-11 md:h-12 text-center flex-1"
+                  maxlength="14"
+                  dir="ltr"
+                />
+                <button
+                  type="submit"
+                  id="submitBtn"
+                  class="btn h-11 md:h-12 px-4 md:px-6 text-base md:text-lg font-bold flex-shrink-0"
+                >
+                  <span>🔍</span>
+                  <span id="btnText">استعلام</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div id="resultsSection" class="hidden space-y-6 fade-in">
+        <!-- Box Number and Citizen Number -->
+        <div id="numbersCard" class="card shadow-2xl border-2" style="border-color: hsl(var(--primary) / 0.4); background: linear-gradient(to bottom right, hsl(var(--card)), hsl(var(--primary) / 0.05));">
+          <div class="card-content pt-4 pb-4 px-2 md:pt-10 md:pb-10 md:px-6">
+            <div class="grid grid-cols-2 gap-2 md:gap-8">
+              <div id="boxNumberCard" class="hidden text-center p-2 md:p-8 rounded-lg md:rounded-3xl border-2 shadow-lg" style="background: linear-gradient(to bottom right, hsl(var(--primary) / 0.15), hsl(var(--primary) / 0.05)); border-color: hsl(var(--primary) / 0.3);">
+                <div class="flex flex-col items-center gap-1 md:gap-4">
+                  <div class="p-1 md:p-4 rounded-full" style="background: hsl(var(--primary) / 0.2);">
+                    <span class="text-2xl">📄</span>
+                  </div>
+                  <div>
+                    <p class="text-[10px] md:text-base font-bold mb-0.5 md:mb-3 uppercase tracking-wide" style="color: hsl(var(--muted-foreground));">رقم الصندوق</p>
+                    <p id="boxNumber" class="text-2xl md:text-6xl lg:text-7xl font-black" style="color: hsl(var(--primary));"></p>
+                  </div>
+                </div>
+              </div>
+              <div id="citizenNumberCard" class="hidden text-center p-2 md:p-8 rounded-lg md:rounded-3xl border-2 shadow-lg" style="background: linear-gradient(to bottom right, hsl(var(--primary) / 0.15), hsl(var(--primary) / 0.05)); border-color: hsl(var(--primary) / 0.3);">
+                <div class="flex flex-col items-center gap-1 md:gap-4">
+                  <div class="p-1 md:p-4 rounded-full" style="background: hsl(var(--primary) / 0.2);">
+                    <span class="text-2xl">👥</span>
+                  </div>
+                  <div>
+                    <p class="text-[10px] md:text-base font-bold mb-0.5 md:mb-3 uppercase tracking-wide" style="color: hsl(var(--muted-foreground));">الرقم الانتخابي</p>
+                    <p id="citizenNumber" class="text-2xl md:text-6xl lg:text-7xl font-black" style="color: hsl(var(--primary));"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Eligibility Status -->
+        <div id="eligibilityCard" class="hidden card shadow-lg border-2" style="border-color: rgba(34, 197, 94, 0.3); background: linear-gradient(to right, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));">
+          <div class="card-content pt-4 pb-4 md:pt-6 md:pb-6 px-4 md:px-6">
+            <div class="flex items-center gap-2 md:gap-4">
+              <div class="p-1.5 md:p-2 rounded-full flex-shrink-0" style="background: rgba(34, 197, 94, 0.2);">
+                <span class="text-xl md:text-2xl">✅</span>
+              </div>
+              <div>
+                <p id="eligibilityText" class="font-bold text-sm md:text-lg lg:text-xl leading-tight" style="color: rgb(21, 128, 61);"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- State Information -->
+        <div id="stateCard" class="hidden card shadow-lg border-2">
+          <div class="card-header" style="background: linear-gradient(to right, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.05)); border-color: hsl(var(--primary) / 0.2);">
+            <h3 class="flex items-center gap-2 md:gap-3 text-base md:text-lg lg:text-xl font-bold" style="color: hsl(var(--primary));">
+              <span class="text-xl">🗺️</span>
+              معلومات المنطقة
+            </h3>
+          </div>
+          <div class="card-content pt-4 md:pt-6 px-3 md:px-6 pb-4 md:pb-6">
+            <div class="grid gap-3 md:gap-4 md:grid-cols-2">
+              <div class="flex items-start gap-2 md:gap-4 p-3 md:p-4 rounded-lg md:rounded-xl border" style="background: linear-gradient(to bottom right, hsl(var(--muted) / 0.6), hsl(var(--muted) / 0.4)); border-color: hsl(var(--border) / 0.5);">
+                <div class="p-1.5 md:p-2 rounded-lg flex-shrink-0" style="background: hsl(var(--primary) / 0.1);">
+                  <span class="text-lg">🏛️</span>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <p class="font-semibold text-xs md:text-sm mb-1" style="color: hsl(var(--muted-foreground));">المحافظة</p>
+                  <p id="governorate" class="text-base md:text-lg lg:text-xl font-bold break-words"></p>
+                </div>
+              </div>
+              <div class="flex items-start gap-2 md:gap-4 p-3 md:p-4 rounded-lg md:rounded-xl border" style="background: linear-gradient(to bottom right, hsl(var(--muted) / 0.6), hsl(var(--muted) / 0.4)); border-color: hsl(var(--border) / 0.5);">
+                <div class="p-1.5 md:p-2 rounded-lg flex-shrink-0" style="background: hsl(var(--primary) / 0.1);">
+                  <span class="text-lg">📍</span>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <p class="font-semibold text-xs md:text-sm mb-1" style="color: hsl(var(--muted-foreground));">المركز</p>
+                  <p id="policeDistrict" class="text-base md:text-lg lg:text-xl font-bold break-words"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Voting Locations -->
+        <div id="locationsCard" class="hidden card shadow-lg border-2">
+          <div class="card-header" style="background: linear-gradient(to right, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.05)); border-color: hsl(var(--primary) / 0.2);">
+            <h3 class="flex items-center gap-2 md:gap-3 text-base md:text-lg lg:text-xl font-bold" style="color: hsl(var(--primary));">
+              <span class="text-xl">📋</span>
+              أماكن التصويت
+            </h3>
+          </div>
+          <div class="card-content pt-4 md:pt-6 px-3 md:px-6 pb-4 md:pb-6">
+            <div id="locationsList" class="space-y-4 md:space-y-6"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Not Found Message -->
+      <div id="notFoundCard" class="hidden card shadow-md border-2 fade-in" style="border-color: hsl(var(--accent) / 0.2);">
+        <div class="card-content pt-4 md:pt-6 px-4 md:px-6 pb-4 md:pb-6">
+          <div class="text-center py-6 md:py-8">
+            <span class="text-6xl md:text-8xl block mb-3 md:mb-4" style="color: hsl(var(--accent));">⚠️</span>
+            <h3 class="text-lg md:text-xl font-bold mb-2 px-2">لم يتم العثور على بيانات</h3>
+            <p class="text-sm md:text-base px-2" style="color: hsl(var(--muted-foreground));">
+              الرجاء التأكد من صحة الرقم القومي والمحاولة مرة أخرى
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'https://proxy.elections.eg/election';
+    
+    const nationalIdInput = document.getElementById('nationalId');
+    const searchForm = document.getElementById('searchForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const resultsSection = document.getElementById('resultsSection');
+    const notFoundCard = document.getElementById('notFoundCard');
+    
+    // Input validation - numbers only
+    nationalIdInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 14);
+    });
+    
+    // Form submission
+    searchForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const nationalId = nationalIdInput.value.trim();
+      
+      if (!nationalId || nationalId.length !== 14) {
+        alert('الرجاء إدخال رقم قومي صحيح مكون من 14 رقم');
+        return;
+      }
+      
+      // Show loading state
+      submitBtn.disabled = true;
+      btnText.textContent = 'جاري البحث...';
+      
+      // Hide previous results
+      resultsSection.classList.add('hidden');
+      notFoundCard.classList.add('hidden');
+      
+      try {
+        const response = await fetch(`${API_URL}?nid=${nationalId}&location=1`);
+        
+        if (!response.ok) {
+          throw new Error('فشل في جلب البيانات');
+        }
+        
+        const data = await response.json();
+        
+        if (!data || data.status !== 'SUCCESS' || !data.voting_info) {
+          showNotFound(data);
+        } else {
+          showResults(data);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        alert('حدث خطأ أثناء جلب البيانات');
+        showNotFound();
+      } finally {
+        submitBtn.disabled = false;
+        btnText.textContent = 'استعلام';
+      }
+    });
+    
+    function showResults(data) {
+      // Show results section
+      resultsSection.classList.remove('hidden');
+      notFoundCard.classList.add('hidden');
+      
+      // Box Number and Citizen Number
+      const boxNumberCard = document.getElementById('boxNumberCard');
+      const citizenNumberCard = document.getElementById('citizenNumberCard');
+      const numbersCard = document.getElementById('numbersCard');
+      
+      if (data.voting_info.box_number) {
+        document.getElementById('boxNumber').textContent = data.voting_info.box_number;
+        boxNumberCard.classList.remove('hidden');
+        numbersCard.classList.remove('hidden');
+      } else {
+        boxNumberCard.classList.add('hidden');
+      }
+      
+      if (data.voting_info.citizen_number) {
+        document.getElementById('citizenNumber').textContent = data.voting_info.citizen_number;
+        citizenNumberCard.classList.remove('hidden');
+        numbersCard.classList.remove('hidden');
+      } else {
+        citizenNumberCard.classList.add('hidden');
+      }
+      
+      // Eligibility
+      if (data.rejection_reason) {
+        document.getElementById('eligibilityText').textContent = data.rejection_reason.description;
+        document.getElementById('eligibilityCard').classList.remove('hidden');
+      }
+      
+      // State Info
+      if (data.state_info) {
+        document.getElementById('governorate').textContent = data.state_info.gov_name;
+        document.getElementById('policeDistrict').textContent = data.state_info.police_name;
+        document.getElementById('stateCard').classList.remove('hidden');
+      }
+      
+      // Locations
+      if (data.voting_info.locations && data.voting_info.locations.length > 0) {
+        const locationsList = document.getElementById('locationsList');
+        locationsList.innerHTML = '';
+        
+        data.voting_info.locations.forEach((location) => {
+          const locationCard = document.createElement('div');
+          locationCard.className = 'card border-2 mb-4';
+          locationCard.style.cssText = 'border-color: hsl(var(--primary) / 0.3); background: linear-gradient(to bottom right, hsl(var(--card)), hsl(var(--primary) / 0.05));';
+          
+          let locationHTML = `
+            <div class="card-content pt-4 pb-4 md:pt-6 md:pb-6 px-3 md:px-6">
+              <div class="space-y-3 md:space-y-4">
+                <div class="flex items-start gap-2 md:gap-4 p-3 md:p-4 rounded-lg md:rounded-xl border" style="background: linear-gradient(to bottom right, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.05)); border-color: hsl(var(--primary) / 0.2);">
+                  <div class="p-1.5 md:p-2 rounded-lg flex-shrink-0" style="background: hsl(var(--primary) / 0.2);">
+                    <span class="text-lg">🏛️</span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="font-semibold text-xs md:text-sm mb-1" style="color: hsl(var(--muted-foreground));">اسم اللجنة</p>
+                    <p class="text-base md:text-lg lg:text-xl font-bold break-words leading-tight">${escapeHtml(location.name)}</p>
+                  </div>
+                </div>
+          `;
+          
+          if (location.unparsed_address) {
+            locationHTML += `
+              <div class="flex items-start gap-2 md:gap-4 p-3 md:p-4 rounded-lg md:rounded-xl border" style="background: linear-gradient(to bottom right, hsl(var(--muted) / 0.6), hsl(var(--muted) / 0.4)); border-color: hsl(var(--border) / 0.5);">
+                <div class="p-1.5 md:p-2 rounded-lg flex-shrink-0" style="background: hsl(var(--primary) / 0.1);">
+                  <span class="text-lg">📍</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="font-semibold text-xs md:text-sm mb-1" style="color: hsl(var(--muted-foreground));">العنوان</p>
+                  <p class="text-sm md:text-base lg:text-lg font-bold break-words">${escapeHtml(location.unparsed_address)}</p>
+                </div>
+              </div>
+            `;
+          }
+          
+          if (location.voting_date) {
+            locationHTML += `
+              <div class="flex items-start gap-2 md:gap-4 p-3 md:p-4 rounded-lg md:rounded-xl border" style="background: linear-gradient(to bottom right, hsl(var(--muted) / 0.6), hsl(var(--muted) / 0.4)); border-color: hsl(var(--border) / 0.5);">
+                <div class="p-1.5 md:p-2 rounded-lg flex-shrink-0" style="background: hsl(var(--primary) / 0.1);">
+                  <span class="text-lg">📅</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="font-semibold text-xs md:text-sm mb-1" style="color: hsl(var(--muted-foreground));">تاريخ التصويت</p>
+                  <p class="text-sm md:text-base lg:text-lg font-bold break-words">${escapeHtml(location.voting_date)}</p>
+                </div>
+              </div>
+            `;
+          }
+          
+          if (location.lat && location.lng) {
+            locationHTML += `
+              <div class="flex items-start gap-2 md:gap-4 p-3 md:p-4 rounded-lg md:rounded-xl border" style="background: linear-gradient(to bottom right, hsl(var(--muted) / 0.6), hsl(var(--muted) / 0.4)); border-color: hsl(var(--border) / 0.5);">
+                <div class="p-1.5 md:p-2 rounded-lg flex-shrink-0" style="background: hsl(var(--primary) / 0.1);">
+                  <span class="text-lg">🗺️</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="font-semibold text-xs md:text-sm mb-1" style="color: hsl(var(--muted-foreground));">الإحداثيات</p>
+                  <p class="text-xs md:text-sm font-mono font-semibold break-all">${escapeHtml(location.lat)}, ${escapeHtml(location.lng)}</p>
+                </div>
+              </div>
+            `;
+          }
+          
+          locationHTML += `
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2 md:gap-3 p-2 md:p-3 rounded-lg text-xs md:text-sm" style="background: hsl(var(--muted) / 0.3); color: hsl(var(--muted-foreground));">
+                  <span class="font-semibold">المحافظة: ${escapeHtml(location.governorate)}</span>
+                  <span class="hidden sm:inline">•</span>
+                  <span class="font-semibold">المركز: ${escapeHtml(location.police_district)}</span>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          locationCard.innerHTML = locationHTML;
+          locationsList.appendChild(locationCard);
+        });
+        
+        document.getElementById('locationsCard').classList.remove('hidden');
+      }
+      
+      // Scroll to results
+      resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+    function showNotFound(data) {
+      resultsSection.classList.add('hidden');
+      notFoundCard.classList.remove('hidden');
+      
+      if (data && data.rejection_reason && data.rejection_reason.code !== '0') {
+        alert(data.rejection_reason.description || 'لا يحق الانتخاب');
+      }
+    }
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+name: Deploy to GitHub Pages (Simple)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare files
+        run: |
+          mkdir -p _site
+          
+          if [ -f "index.html" ]; then
+            cp index.html _site/
+          elif [ -f "index-standalone.html" ]; then
+            cp index-standalone.html _site/index.html
+          fi
+          
+          if [ -f "bassem-eldeeb.jpg" ]; then
+            cp bassem-eldeeb.jpg _site/
+          elif [ -f "src/assets/bassem-eldeeb.jpg" ]; then
+            cp src/assets/bassem-eldeeb.jpg _site/bassem-eldeeb.jpg
+          fi
+          
+          echo "Files ready:"
+          ls -la _site/
+
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          cname: false
+

@@ -64,16 +64,16 @@ const Index = () => {
         <div className="container max-w-4xl mx-auto">
           <div className="flex items-center justify-center gap-6">
             <div className="flex-shrink-0 w-20 h-20 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border-2 border-white/30">
-              <span className="text-3xl font-bold">م</span>
+              <span className="text-4xl">✋</span>
             </div>
             <div className="text-center flex-grow">
-              <h1 className="text-2xl md:text-3xl font-bold mb-1">المرشح الانتخابي</h1>
+              <h1 className="text-2xl md:text-3xl font-bold mb-1">باسم الديب</h1>
               <div className="flex items-center justify-center gap-4 mt-2">
                 <span className="bg-secondary text-secondary-foreground px-4 py-1 rounded-full font-bold text-lg">
-                  الرمز: ⭐
+                  الرمز: ✋
                 </span>
                 <span className="bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full font-bold text-lg">
-                  الرقم: 1
+                  الرقم: 5
                 </span>
               </div>
             </div>

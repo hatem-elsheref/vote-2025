@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "build:dev": "vite build --mode development",
+    "build:root": "VITE_BASE_PATH=/ vite build",
+    "build:gh-pages": "VITE_BASE_PATH=/vote-2025/ vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },

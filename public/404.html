@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>استعلام عن بيانات الانتخابات</title>
+    <script>
+      // GitHub Pages 404.html workaround for SPA routing
+      // Redirect all 404s to index.html for client-side routing
+      var basePath = '/vote-2025';
+      var l = window.location;
+      var path = l.pathname;
+      
+      // If path starts with basePath, use it; otherwise prepend it
+      if (path.indexOf(basePath) === 0) {
+        path = path.slice(basePath.length) || '/';
+      }
+      
+      // Redirect to index.html with the path as query parameter
+      var redirectUrl = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + 
+        basePath + '/index.html';
+      
+      if (path !== '/') {
+        redirectUrl += '?/' + path.replace(/^\//, '').replace(/&/g, '~and~');
+      }
+      
+      if (l.search) {
+        redirectUrl += (path === '/' ? '?' : '&') + l.search.slice(1).replace(/&/g, '~and~');
+      }
+      
+      if (l.hash) {
+        redirectUrl += l.hash;
+      }
+      
+      window.location.replace(redirectUrl);
+    </script>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+  </body>
+</html>
+

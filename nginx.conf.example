@@ -1,0 +1,28 @@
+# Nginx configuration example for serving Vite build
+server {
+    listen 80;
+    server_name localhost;
+    root /path/to/your/dist;
+    index index.html;
+
+    # Set correct MIME types
+    location ~* \.(js|mjs)$ {
+        add_header Content-Type application/javascript;
+    }
+
+    location ~* \.css$ {
+        add_header Content-Type text/css;
+    }
+
+    # Handle SPA routing
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Cache static assets
+    location ~* \.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+}
+
